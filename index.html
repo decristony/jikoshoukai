@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>とにーの じこしょうかい</title>
+  <meta name="description" content="とにーの じこしょうかい うぇぶさいと。ひらがなだけの うつくしい にほんの ぷれぜんてーしょん。">
+  
+  <!-- Google Fonts: Shippori Mincho & Zen Maru Gothic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 和紙テクスチャ オーバーレイ (Washi paper background) -->
+  <div class="washi-grain" aria-hidden="true"></div>
+
+  <!-- さくらの はなびら きゃんばす (Sakura Canvas) -->
+  <canvas id="sakura-canvas" aria-hidden="true"></canvas>
+
+  <!-- おと すいっち (Zen ambient audio toggle) -->
+  <button id="sound-btn" class="sound-toggle" aria-label="おと すいっち" title="おとの きりかえ">
+    <span class="sound-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+        <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zm-4 2.77l-4 4H2v4h4l4 4V6zm2 3.27v5.46c1.19-.69 2-1.99 2-3.46 0-1.47-.81-2.77-2-2.73z"/>
+      </svg>
+    </span>
+    <span id="sound-label" class="sound-label">おと：おふ</span>
+  </button>
+
+  <!-- みぎがわの なびげーしょん (Right Side Navigation Rail) -->
+  <nav class="side-nav" aria-label="ぺーじの なびげーしょん">
+    <div class="nav-line" aria-hidden="true">
+      <div class="nav-line-progress" id="nav-progress-bar"></div>
+    </div>
+    <ul class="nav-dots" id="nav-dots-list">
+      <li class="nav-item active" data-index="0" title="ぜろいち"><button type="button" aria-label="ぜろいち"><span class="dot-num">01</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="1" title="ぜろに"><button type="button" aria-label="ぜろに"><span class="dot-num">02</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="2" title="ぜろさん"><button type="button" aria-label="ぜろさん"><span class="dot-num">03</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="3" title="ぜろよん"><button type="button" aria-label="ぜろよん"><span class="dot-num">04</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="4" title="ぜろご"><button type="button" aria-label="ぜろご"><span class="dot-num">05</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="5" title="ぜろろく"><button type="button" aria-label="ぜろろく"><span class="dot-num">06</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="6" title="ぜろなな"><button type="button" aria-label="ぜろなな"><span class="dot-num">07</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="7" title="ぜろはち"><button type="button" aria-label="ぜろはち"><span class="dot-num">08</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="8" title="ぜろきゅう"><button type="button" aria-label="ぜろきゅう"><span class="dot-num">09</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="9" title="じゅう"><button type="button" aria-label="じゅう"><span class="dot-num">10</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="10" title="じゅういち"><button type="button" aria-label="じゅういち"><span class="dot-num">11</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="11" title="じゅうに"><button type="button" aria-label="じゅうに"><span class="dot-num">12</span><span class="dot-circle"></span></button></li>
+      <li class="nav-item" data-index="12" title="じゅうさん"><button type="button" aria-label="じゅうさん"><span class="dot-num">13</span><span class="dot-circle"></span></button></li>
+    </ul>
+  </nav>
+
+  <!-- すくろーる こんてな (Main Scroll Container) -->
+  <main class="scroll-container" id="scroll-container">
+
+    <!-- 01: みなさん、おはようございます。 -->
+    <section class="scene scene-01" id="scene-01" data-scene="1">
+      <div class="scene-bg" aria-hidden="true">
+        <div class="sun-glow"></div>
+        <div class="vermilion-sun"></div>
+        <svg class="bg-illustration fuji-illustration" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
+          <!-- 富士山と雲のシルエット -->
+          <defs>
+            <linearGradient id="fuji-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#c53d33" stop-opacity="0.18"/>
+              <stop offset="60%" stop-color="#2a2321" stop-opacity="0.12"/>
+              <stop offset="100%" stop-color="#2a2321" stop-opacity="0.02"/>
+            </linearGradient>
+            <linearGradient id="cloud-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#ffffff" stop-opacity="0.65"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- 富士山 -->
+          <path class="fuji-mountain" d="M120 480 L440 160 Q500 120 560 160 L880 480 Z" fill="url(#fuji-grad)" />
+          <path class="fuji-snow" d="M440 160 Q500 120 560 160 L590 220 Q545 200 520 230 Q485 195 450 235 Q430 205 410 220 Z" fill="#ffffff" opacity="0.75"/>
+          <!-- 鳥の群れ -->
+          <path class="birds" d="M280 180 Q290 170 300 180 Q310 170 320 180 M330 200 Q338 192 346 200 Q354 192 362 200 M250 210 Q257 203 264 210 Q271 203 278 210" stroke="#b83b32" stroke-width="2" fill="none" opacity="0.4" />
+          <!-- 朝霧・雲 -->
+          <ellipse cx="380" cy="360" rx="340" ry="24" fill="url(#cloud-grad)"/>
+          <ellipse cx="640" cy="400" rx="380" ry="30" fill="url(#cloud-grad)"/>
+        </svg>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">ぜろいち</div>
+        <h1 class="main-title">
+          <span class="line-reveal">みなさん、</span><br>
+          <span class="line-reveal delay-1">おはようございます。</span>
+        </h1>
+        <div class="sub-symbol">
+          <span class="hanko-seal">あさ</span>
+        </div>
+      </div>
+
+      <!-- すくろーしてね (Scroll hint) -->
+      <div class="scroll-hint" id="scroll-hint">
+        <span class="scroll-text">すくろーしてね</span>
+        <div class="scroll-mouse" aria-hidden="true">
+          <div class="scroll-wheel"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02: はじめまして。 -->
+    <section class="scene scene-02" id="scene-02" data-scene="2">
+      <div class="scene-bg" aria-hidden="true">
+        <svg class="bg-illustration bow-illustration" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="enso-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#c53d33" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#2a2321" stop-opacity="0.12"/>
+            </linearGradient>
+            <linearGradient id="bow-figure-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#2a2321" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#2a2321" stop-opacity="0.35"/>
+            </linearGradient>
+          </defs>
+
+          <!-- 円相 (Enso brush circle) -->
+          <circle class="enso-circle" cx="400" cy="290" r="195" stroke="url(#enso-grad)" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.35" stroke-dasharray="1300" stroke-dashoffset="1300"/>
+          
+          <!-- たたみの床線と影 (Floor line & shadows) -->
+          <ellipse cx="275" cy="470" rx="90" ry="10" fill="#2b2625" opacity="0.12"/>
+          <ellipse cx="525" cy="470" rx="90" ry="10" fill="#2b2625" opacity="0.12"/>
+          <line x1="160" y1="470" x2="640" y2="470" stroke="#c53d33" stroke-width="1.5" opacity="0.25" stroke-dasharray="8 6"/>
+
+          <!-- おじぎをするふたり (Two people bowing in authentic Japanese ojigi) -->
+          <g class="bowing-figures" opacity="0.55">
+            <!-- 左側の人 (Left person bowing facing right) -->
+            <g class="bow-person person-left">
+              <!-- 袴・着物の裾 (Hakama lower body) -->
+              <path d="M255 355 C255 355 240 405 225 470 L325 470 C315 410 300 365 300 355 Z" fill="url(#bow-figure-grad)"/>
+              <line x1="265" y1="365" x2="260" y2="470" stroke="#fcf9f2" stroke-width="1.2" opacity="0.25"/>
+              <line x1="285" y1="365" x2="290" y2="470" stroke="#fcf9f2" stroke-width="1.2" opacity="0.25"/>
+
+              <!-- 帯 (Obi waist sash with red accent) -->
+              <path d="M252 342 L298 348 L296 360 L250 354 Z" fill="#c53d33" opacity="0.85"/>
+
+              <!-- 上半身・背中・胸 (Torso bent forward at ~38 deg) -->
+              <path d="M252 342 C270 305 300 270 340 248 L356 268 C325 295 300 325 285 354 Z" fill="url(#bow-figure-grad)"/>
+
+              <!-- 着物の襟元 (Kimono collar) -->
+              <path d="M340 248 L362 268 L348 278 Z" fill="#ffffff" opacity="0.5"/>
+              <path d="M344 252 L358 266" stroke="#c53d33" stroke-width="2" opacity="0.75"/>
+
+              <!-- 首と頭部 (Tilted head & traditional hair bun) -->
+              <path d="M336 248 L355 235 L362 245 L346 256 Z" fill="url(#bow-figure-grad)"/>
+              <ellipse cx="368" cy="225" rx="20" ry="16" transform="rotate(38 368 225)" fill="url(#bow-figure-grad)"/>
+              <ellipse cx="350" cy="210" rx="9" ry="7" transform="rotate(25 350 210)" fill="url(#bow-figure-grad)"/>
+
+              <!-- 着物の袖 (Draped kimono sleeve) -->
+              <path d="M328 268 C342 276 350 295 350 335 C350 365 332 368 322 355 C314 330 312 295 328 268 Z" fill="url(#bow-figure-grad)"/>
+              
+              <!-- 丁寧に揃えられた手 (Respectfully aligned hands) -->
+              <ellipse cx="340" cy="336" rx="9" ry="6" transform="rotate(35 340 336)" fill="#ebdccb"/>
+            </g>
+
+            <!-- 右側の人 (Right person bowing facing left) -->
+            <g class="bow-person person-right">
+              <!-- 袴・着物の裾 (Hakama lower body) -->
+              <path d="M545 355 C545 355 560 405 575 470 L475 470 C485 410 500 365 500 355 Z" fill="url(#bow-figure-grad)"/>
+              <line x1="535" y1="365" x2="540" y2="470" stroke="#fcf9f2" stroke-width="1.2" opacity="0.25"/>
+              <line x1="515" y1="365" x2="510" y2="470" stroke="#fcf9f2" stroke-width="1.2" opacity="0.25"/>
+
+              <!-- 帯 (Obi waist sash with red accent) -->
+              <path d="M548 342 L502 348 L504 360 L550 354 Z" fill="#c53d33" opacity="0.85"/>
+
+              <!-- 上半身・背中・胸 (Torso bent forward) -->
+              <path d="M548 342 C530 305 500 270 460 248 L444 268 C475 295 500 325 515 354 Z" fill="url(#bow-figure-grad)"/>
+
+              <!-- 着物の襟元 (Kimono collar) -->
+              <path d="M460 248 L438 268 L452 278 Z" fill="#ffffff" opacity="0.5"/>
+              <path d="M456 252 L442 266" stroke="#c53d33" stroke-width="2" opacity="0.75"/>
+
+              <!-- 首と頭部 (Tilted head & traditional hair bun) -->
+              <path d="M464 248 L445 235 L438 245 L454 256 Z" fill="url(#bow-figure-grad)"/>
+              <ellipse cx="432" cy="225" rx="20" ry="16" transform="rotate(-38 432 225)" fill="url(#bow-figure-grad)"/>
+              <ellipse cx="450" cy="210" rx="9" ry="7" transform="rotate(-25 450 210)" fill="url(#bow-figure-grad)"/>
+
+              <!-- 着物の袖 (Draped kimono sleeve) -->
+              <path d="M472 268 C458 276 450 295 450 335 C450 365 468 368 478 355 C486 330 488 295 472 268 Z" fill="url(#bow-figure-grad)"/>
+              
+              <!-- 丁寧に揃えられた手 (Respectfully aligned hands) -->
+              <ellipse cx="460" cy="336" rx="9" ry="6" transform="rotate(-35 460 336)" fill="#ebdccb"/>
+            </g>
+
+            <!-- 互いへの敬意を表す光の結び (Subtle arc of mutual respect) -->
+            <path d="M382 238 Q400 252 418 238" stroke="#c53d33" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.7"/>
+            <circle cx="400" cy="245" r="3" fill="#c53d33" opacity="0.85"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">ぜろに</div>
+        <h2 class="main-title">
+          <span class="line-reveal">はじめまして。</span>
+        </h2>
+      </div>
+    </section>
+
+    <!-- 03: ぼくは とにーです。 -->
+    <section class="scene scene-03" id="scene-03" data-scene="3">
+      <div class="scene-bg" aria-hidden="true">
+        <svg class="bg-illustration profile-illustration" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+          <!-- 巨大な落款印 (Big red hanko stamp in background) -->
+          <rect class="bg-hanko-box" x="270" y="160" width="260" height="260" rx="36" fill="#c53d33" opacity="0.08" stroke="#c53d33" stroke-width="6"/>
+          <text class="bg-hanko-text" x="400" y="325" text-anchor="middle" font-size="110" fill="#c53d33" opacity="0.14" font-family="'Shippori Mincho', serif">とにー</text>
+          
+          <!-- ミニマルな横顔シルエット -->
+          <g class="profile-silhouette" opacity="0.18">
+            <circle cx="400" cy="250" r="85" fill="#252120"/>
+            <path d="M260 490 C260 390 320 370 400 370 C480 370 540 390 540 490 Z" fill="#252120"/>
+            <!-- 輪郭の赤いアクセント -->
+            <path d="M400 165 A85 85 0 0 1 485 250" stroke="#c53d33" stroke-width="5" fill="none" opacity="0.6"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">ぜろさん</div>
+        <h2 class="main-title">
+          <span class="line-reveal">ぼくは とにーです。</span>
+        </h2>
+        <div class="hanko-badge">
+          <span class="hanko-seal-lg">とにー</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04: にじゅうはっさいです。 -->
+    <section class="scene scene-04" id="scene-04" data-scene="4">
+      <div class="scene-bg" aria-hidden="true">
+        <!-- 巨大な数字 28 の背景透かし -->
+        <div class="giant-numeral" aria-hidden="true">28</div>
+        <svg class="bg-illustration age-illustration" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+          <!-- 28個の小さな光の環 -->
+          <circle cx="400" cy="300" r="230" stroke="#c53d33" stroke-width="2" stroke-dasharray="6 12" fill="none" opacity="0.25"/>
+          <circle cx="400" cy="300" r="190" stroke="#252120" stroke-width="1.5" stroke-dasharray="4 8" fill="none" opacity="0.15"/>
+          <g class="orbital-dots" id="orbital-dots-group"></g>
+        </svg>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">ぜろよん</div>
+        <h2 class="main-title">
+          <span class="line-reveal">にじゅうはっさいです。</span>
+        </h2>
+      </div>
+    </section>
+
+    <!-- 05: ぶらじるじんです。 -->
+    <section class="scene scene-05" id="scene-05" data-scene="5">
+      <div class="scene-bg" aria-hidden="true">
+        <svg class="bg-illustration brazil-illustration" viewBox="0 0 900 700" preserveAspectRatio="xMidYMid meet">
+          <!-- 水墨画風 ブラジル地図シルエット -->
+          <defs>
+            <radialGradient id="brazil-warmth" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#4e8c56" stop-opacity="0.12"/>
+              <stop offset="60%" stop-color="#d4aa3b" stop-opacity="0.08"/>
+              <stop offset="100%" stop-color="#c53d33" stop-opacity="0.02"/>
+            </radialGradient>
+          </defs>
+          <path class="brazil-map-path" d="M370 140 C430 130 510 140 560 170 C610 200 630 240 600 280 C580 300 620 330 630 360 C640 400 590 430 560 480 C540 520 510 570 480 580 C460 590 440 550 440 520 C430 480 400 450 370 420 C340 390 320 370 300 350 C270 320 280 290 300 260 C320 230 330 200 340 170 Z" fill="url(#brazil-warmth)" stroke="#3a322d" stroke-width="2.5" opacity="0.32" stroke-dasharray="8 4"/>
+          <!-- 和風コンパス・波紋 -->
+          <circle cx="470" cy="350" r="140" stroke="#d4aa3b" stroke-width="1.5" fill="none" opacity="0.25"/>
+          <circle cx="470" cy="350" r="90" stroke="#4e8c56" stroke-width="1" fill="none" opacity="0.25"/>
+          <circle cx="470" cy="350" r="8" fill="#c53d33" opacity="0.4"/>
+        </svg>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">ぜろご</div>
+        <h2 class="main-title">
+          <span class="line-reveal">ぶらじるじんです。</span>
+        </h2>
+      </div>
+    </section>
+
+    <!-- 06: ぽんたあるた から きました。 -->
+    <section class="scene scene-06" id="scene-06" data-scene="6">
+      <div class="scene-bg" aria-hidden="true">
+        <svg class="bg-illustration journey-illustration" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
+          <!-- 航路の弧線 (Curved flight path across map) -->
+          <path class="flight-path" d="M180 430 Q500 120 820 240" stroke="#c53d33" stroke-width="3" stroke-dasharray="8 8" fill="none" opacity="0.45"/>
+          
+          <!-- 出発地: ぽんたあるた (Ponta Grossa) -->
+          <g class="origin-pin">
+            <circle cx="180" cy="430" r="14" fill="#c53d33" opacity="0.25"/>
+            <circle cx="180" cy="430" r="6" fill="#c53d33"/>
+            <text x="180" y="470" text-anchor="middle" font-size="19" fill="#52453e" font-family="'Zen Maru Gothic', sans-serif">ぽんたあるた</text>
+          </g>
+
+          <!-- 折り鶴 (Origami crane gliding along path) -->
+          <g class="origami-crane" transform="translate(500, 220) scale(0.9)">
+            <polygon points="0,-25 25,15 -25,15" fill="#f7f2ea" stroke="#b83b32" stroke-width="2"/>
+            <polygon points="0,-25 -45,0 -15,10" fill="#f2eae0" stroke="#b83b32" stroke-width="2"/>
+            <polygon points="0,-25 45,0 15,10" fill="#f2eae0" stroke="#b83b32" stroke-width="2"/>
+            <polygon points="0,-25 0,-40 -12,-30" fill="#c53d33"/>
+          </g>
+
+          <!-- 到着地: にっぽん (Japan) -->
+          <g class="dest-pin">
+            <circle cx="820" cy="240" r="22" stroke="#c53d33" stroke-width="2" fill="none" opacity="0.35"/>
+            <circle cx="820" cy="240" r="7" fill="#c53d33"/>
+            <text x="820" y="280" text-anchor="middle" font-size="19" fill="#52453e" font-family="'Zen Maru Gothic', sans-serif">にほん</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">ぜろろく</div>
+        <h2 class="main-title">
+          <span class="line-reveal">ぽんたあるた から きました。</span>
+        </h2>
+      </div>
+    </section>
+
+    <!-- 07: ぷろぐらまーです。だから、うぇぶさいとを つくっています。 -->
+    <section class="scene scene-07 tech-theme" id="scene-07" data-scene="7">
+      <div class="scene-bg" aria-hidden="true">
+        <!-- サイバー和モダン: コード＆端末 (Modern Japanese Cyber-Zen Terminal) -->
+        <div class="tech-window">
+          <div class="tech-window-header">
+            <span class="window-dot red"></span>
+            <span class="window-dot yellow"></span>
+            <span class="window-dot green"></span>
+            <span class="window-title">ぷろぐらむ</span>
+          </div>
+          <div class="tech-code-content">
+            <div class="code-line"><span class="code-k">ていぎ</span> <span class="code-v">ぼく</span> = {</div>
+            <div class="code-line indent"><span class="code-p">なまえ</span>: <span class="code-s">"とにー"</span>,</div>
+            <div class="code-line indent"><span class="code-p">しごと</span>: <span class="code-s">"ぷろぐらまー"</span>,</div>
+            <div class="code-line indent"><span class="code-p">すきる</span>: [<span class="code-s">"うぇぶ"</span>, <span class="code-s">"でざいん"</span>, <span class="code-s">"こーど"</span>]</div>
+            <div class="code-line">};</div>
+            <div class="code-line"><span class="code-k">かんすう</span> <span class="code-f">うぇぶさいとをつくる</span>() {</div>
+            <div class="code-line indent"><span class="code-r">もどす</span> <span class="code-s">"うつくしい ぺーじ"</span>;</div>
+            <div class="code-line">}</div>
+            <div class="code-line"><span class="code-comment">// まいにち こーどを かいています...</span><span class="code-cursor"></span></div>
+          </div>
+        </div>
+
+        <!-- 浮遊するUIワイヤーフレーム -->
+        <div class="floating-ui-card ui-card-1">
+          <div class="ui-line title-bar"></div>
+          <div class="ui-line content-bar"></div>
+          <div class="ui-box-grid">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="floating-ui-card ui-card-2">
+          <div class="ui-circle-badge"></div>
+          <div class="ui-line short-bar"></div>
+        </div>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">ぜろなな</div>
+        <h2 class="main-title">
+          <span class="line-reveal">ぷろぐらまーです。</span><br>
+          <span class="line-reveal delay-1">だから、うぇぶさいとを つくっています。</span>
+        </h2>
+      </div>
+    </section>
+
+    <!-- 08: にほんごの がくせいです。 -->
+    <section class="scene scene-08" id="scene-08" data-scene="8">
+      <div class="scene-bg" aria-hidden="true">
+        <!-- 原稿用紙マス目グリッド (Genkouyoushi grid) -->
+        <div class="genkouyoushi-grid">
+          <div class="grid-cell"><span>あ</span></div>
+          <div class="grid-cell"><span>い</span></div>
+          <div class="grid-cell"><span>う</span></div>
+          <div class="grid-cell"><span>え</span></div>
+          <div class="grid-cell"><span>お</span></div>
+          <div class="grid-cell"><span>か</span></div>
+          <div class="grid-cell"><span>き</span></div>
+          <div class="grid-cell"><span>く</span></div>
+          <div class="grid-cell"><span>け</span></div>
+          <div class="grid-cell"><span>こ</span></div>
+          <div class="grid-cell"><span>さ</span></div>
+          <div class="grid-cell"><span>し</span></div>
+          <div class="grid-cell"><span>す</span></div>
+          <div class="grid-cell"><span>せ</span></div>
+          <div class="grid-cell"><span>そ</span></div>
+        </div>
+
+        <svg class="bg-illustration study-illustration" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+          <!-- 万年筆・毛筆シルエット -->
+          <g class="fude-brush" transform="translate(560, 200) rotate(42)" opacity="0.2">
+            <path d="M0 0 L18 0 L15 180 L5 210 L0 180 Z" fill="#252120"/>
+            <path d="M5 210 L9 240 L13 210 Z" fill="#c53d33"/>
+          </g>
+          <!-- 開いたノート -->
+          <path d="M240 380 Q400 400 560 380 L580 480 Q400 500 220 480 Z" fill="#ffffff" opacity="0.45" stroke="#3d332f" stroke-width="1.5"/>
+          <line x1="400" y1="390" x2="400" y2="490" stroke="#c53d33" stroke-width="2" opacity="0.4"/>
+        </svg>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">ぜろはち</div>
+        <h2 class="main-title">
+          <span class="line-reveal">にほんごの がくせいです。</span>
+        </h2>
+      </div>
+    </section>
+
+    <!-- 09: すぽーつを します。さっかーと ばれーぼーると およぐのが とても すきです。 -->
+    <section class="scene scene-09" id="scene-09" data-scene="9">
+      <div class="scene-bg" aria-hidden="true">
+        <!-- 動くサッカーボール & バレーボール -->
+        <div class="sports-element soccer-ball" id="soccer-ball">
+          <svg viewBox="0 0 100 100" width="84" height="84">
+            <circle cx="50" cy="50" r="46" fill="#fcf9f2" stroke="#252120" stroke-width="3"/>
+            <polygon points="50,22 65,33 59,50 41,50 35,33" fill="#252120"/>
+            <line x1="50" y1="22" x2="50" y2="6" stroke="#252120" stroke-width="2.5"/>
+            <line x1="65" y1="33" x2="82" y2="30" stroke="#252120" stroke-width="2.5"/>
+            <line x1="59" y1="50" x2="72" y2="66" stroke="#252120" stroke-width="2.5"/>
+            <line x1="41" y1="50" x2="28" y2="66" stroke="#252120" stroke-width="2.5"/>
+            <line x1="35" y1="33" x2="18" y2="30" stroke="#252120" stroke-width="2.5"/>
+          </svg>
+        </div>
+
+        <div class="sports-element volley-ball" id="volley-ball">
+          <svg viewBox="0 0 100 100" width="76" height="76">
+            <circle cx="50" cy="50" r="46" fill="#fcf9f2" stroke="#252120" stroke-width="3"/>
+            <path d="M12 35 C28 45 45 42 50 50 C42 68 45 85 35 88" stroke="#252120" stroke-width="2.5" fill="none"/>
+            <path d="M50 50 C68 42 85 45 88 35" stroke="#252120" stroke-width="2.5" fill="none"/>
+            <path d="M50 50 C48 30 60 14 68 12" stroke="#252120" stroke-width="2.5" fill="none"/>
+          </svg>
+        </div>
+
+        <!-- 北斎風の青海波・大波 (Seigaiha swimming wave) -->
+        <svg class="bg-illustration wave-illustration" viewBox="0 0 1200 400" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="wave-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#366782" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#243f52" stop-opacity="0.05"/>
+            </linearGradient>
+          </defs>
+          <path class="dynamic-wave-back" d="M0 260 Q300 160 600 240 T1200 210 L1200 400 L0 400 Z" fill="url(#wave-grad)"/>
+          <path class="dynamic-wave-front" d="M0 300 Q280 200 580 280 T1200 270 L1200 400 L0 400 Z" fill="#4a7c98" opacity="0.18"/>
+          <!-- 水しぶき (Water droplets) -->
+          <circle cx="340" cy="220" r="4" fill="#699ebf" opacity="0.5"/>
+          <circle cx="360" cy="205" r="3" fill="#699ebf" opacity="0.6"/>
+          <circle cx="920" cy="240" r="5" fill="#699ebf" opacity="0.4"/>
+        </svg>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">ぜろきゅう</div>
+        <h2 class="main-title">
+          <span class="line-reveal">すぽーつを します。</span><br>
+          <span class="line-reveal delay-1">さっかーと ばれーぼーると およぐのが とても すきです。</span>
+        </h2>
+        <div class="sport-icons-row">
+          <span class="sport-tag">さっかー ⚽</span>
+          <span class="sport-tag">ばれーぼーる 🏐</span>
+          <span class="sport-tag">およぐこと 🏊</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10: ときどき えいがを みます。こめでぃー、ふぁんたじー、そして あくしょんが すきです。 -->
+    <section class="scene scene-10 cinema-theme" id="scene-10" data-scene="10">
+      <div class="scene-bg" aria-hidden="true">
+        <!-- 映画プロジェクターの光線 (Projector light beam) -->
+        <div class="projector-beam"></div>
+
+        <!-- 3つの大好きなジャンルカード (Three liked genre cards) -->
+        <div class="cinema-genre-cards">
+          <div class="genre-card card-comedy">
+            <div class="genre-icon">
+              <!-- 笑いのお面 / コメディ -->
+              <svg viewBox="0 0 64 64" width="46" height="46">
+                <circle cx="32" cy="32" r="28" stroke="#d4aa3b" stroke-width="3" fill="#fffdfa"/>
+                <path d="M22 26 Q26 21 30 26 M34 26 Q38 21 42 26" stroke="#252120" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M22 38 Q32 50 42 38" stroke="#c53d33" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="genre-label">こめでぃー</span>
+          </div>
+
+          <div class="genre-card card-fantasy">
+            <div class="genre-icon">
+              <!-- 魔法の星 / ファンタジー -->
+              <svg viewBox="0 0 64 64" width="46" height="46">
+                <path d="M32 6 L38 24 L56 26 L42 38 L46 56 L32 46 L18 56 L22 38 L8 26 L26 24 Z" fill="#5885af" stroke="#fffdfa" stroke-width="2"/>
+                <circle cx="48" cy="16" r="3" fill="#d4aa3b"/>
+                <circle cx="16" cy="46" r="2" fill="#d4aa3b"/>
+              </svg>
+            </div>
+            <span class="genre-label">ふぁんたじー</span>
+          </div>
+
+          <div class="genre-card card-action">
+            <div class="genre-icon">
+              <!-- 閃光・剣 / アクション -->
+              <svg viewBox="0 0 64 64" width="46" height="46">
+                <path d="M12 52 L48 16 M40 14 L52 14 L52 26" stroke="#c53d33" stroke-width="4" stroke-linecap="round" fill="none"/>
+                <path d="M24 44 L16 36 M28 48 L20 40" stroke="#252120" stroke-width="3"/>
+                <polygon points="46,12 54,12 54,20" fill="#c53d33"/>
+              </svg>
+            </div>
+            <span class="genre-label">あくしょん</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">じゅう</div>
+        <h2 class="main-title">
+          <span class="line-reveal">ときどき えいがを みます。</span><br>
+          <span class="line-reveal delay-1">こめでぃー、ふぁんたじー、そして あくしょんが すきです。</span>
+        </h2>
+      </div>
+    </section>
+
+    <!-- 11: でも、ほらーえいがと れんあいえいがは あまり すきじゃないです。 -->
+    <section class="scene scene-11" id="scene-11" data-scene="11">
+      <div class="scene-bg" aria-hidden="true">
+        <!-- 苦手なジャンル (おばけ＆ハート) が X で打ち消されて吹き飛ぶ演出 -->
+        <div class="dislike-container">
+          <div class="dislike-item item-horror" id="dislike-horror">
+            <div class="dislike-art">
+              <!-- おばけシルエット (Horror ghost) -->
+              <svg viewBox="0 0 80 80" width="68" height="68">
+                <path d="M40 10 C24 10 18 24 18 42 C18 64 24 68 28 62 C32 56 36 68 40 62 C44 56 48 68 52 62 C56 68 62 64 62 42 C62 24 56 10 40 10 Z" fill="#6d6568" opacity="0.6"/>
+                <circle cx="32" cy="34" r="4" fill="#ffffff"/>
+                <circle cx="48" cy="34" r="4" fill="#ffffff"/>
+                <ellipse cx="40" cy="46" rx="5" ry="8" fill="#ffffff"/>
+              </svg>
+            </div>
+            <span class="dislike-label">ほらーえいが</span>
+            <!-- 赤いバツ印 (Red X stroke) -->
+            <div class="batsu-mark">
+              <span>✕</span>
+            </div>
+          </div>
+
+          <div class="dislike-item item-romance" id="dislike-romance">
+            <div class="dislike-art">
+              <!-- ハート (Romance heart) -->
+              <svg viewBox="0 0 80 80" width="68" height="68">
+                <path d="M40 64 C20 48 14 36 14 26 C14 16 22 10 30 10 C36 10 40 14 40 14 C40 14 44 10 50 10 C58 10 66 16 66 26 C66 36 60 48 40 64 Z" fill="#d9727f" opacity="0.65"/>
+              </svg>
+            </div>
+            <span class="dislike-label">れんあいえいが</span>
+            <!-- 赤いバツ印 (Red X stroke) -->
+            <div class="batsu-mark">
+              <span>✕</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">じゅういち</div>
+        <h2 class="main-title">
+          <span class="line-reveal">でも、ほらーえいがと れんあいえいがは</span><br>
+          <span class="line-reveal delay-1">あまり すきじゃないです。</span>
+        </h2>
+
+        <div class="genre-icons-row">
+          <span class="genre-tag">ほらー</span>
+          <span class="genre-tag">れんあい</span>
+          <span class="genre-tag">どらま</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12: いじょうです。 -->
+    <section class="scene scene-12 zen-void" id="scene-12" data-scene="12">
+      <div class="scene-bg" aria-hidden="true">
+        <!-- 静寂と余白 (The pure Zen emptiness / Ma) -->
+        <svg class="bg-illustration void-illustration" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet">
+          <circle cx="300" cy="300" r="160" stroke="#c53d33" stroke-width="1.5" stroke-dasharray="2 8" fill="none" opacity="0.25"/>
+          <circle cx="300" cy="300" r="4" fill="#c53d33" opacity="0.4"/>
+        </svg>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">じゅうに</div>
+        <h2 class="main-title serene-title">
+          <span class="line-reveal">いじょうです。</span>
+        </h2>
+        <div class="serene-line"></div>
+      </div>
+    </section>
+
+    <!-- 13: よろしく おねがいします、みなさん！ (グランドフィナーレ) -->
+    <section class="scene scene-13 finale-scene" id="scene-13" data-scene="13">
+      <div class="scene-bg" aria-hidden="true">
+        <div class="grand-sun-glow"></div>
+        <div class="grand-red-circle"></div>
+
+        <svg class="bg-illustration finale-landscape" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="gate-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#c53d33" stop-opacity="0.32"/>
+              <stop offset="100%" stop-color="#2a2321" stop-opacity="0.12"/>
+            </linearGradient>
+          </defs>
+
+          <!-- 遠くの山並み (Distant mountain ranges) -->
+          <path d="M0 460 Q220 380 480 430 T1000 420 L1000 600 L0 600 Z" fill="#282220" opacity="0.08"/>
+          <path d="M0 500 Q360 440 680 490 T1000 480 L1000 600 L0 600 Z" fill="#282220" opacity="0.12"/>
+
+          <!-- 鳥居のシルエット (Minimalist Torii Gate Silhouette) -->
+          <g class="torii-gate" transform="translate(420, 310)" fill="url(#gate-grad)">
+            <!-- 上の笠木・島木 -->
+            <path d="M-60 10 Q80 -5 220 10 L216 26 Q80 14 -56 26 Z"/>
+            <rect x="-40" y="32" width="240" height="12" rx="2"/>
+            <!-- 額束 -->
+            <rect x="74" y="24" width="12" height="24"/>
+            <!-- 柱2本 -->
+            <rect x="-10" y="32" width="18" height="160" rx="3"/>
+            <rect x="152" y="32" width="18" height="160" rx="3"/>
+            <!-- 貫 (水平の梁) -->
+            <rect x="-30" y="74" width="220" height="14" rx="2"/>
+            <!-- 根巻・基礎 -->
+            <rect x="-14" y="180" width="26" height="12" rx="2"/>
+            <rect x="148" y="180" width="26" height="12" rx="2"/>
+          </g>
+
+          <!-- 桜の枝のシルエット (Graceful Sakura branch) -->
+          <path d="M80 60 Q180 120 280 100 Q340 160 420 130" stroke="#3d332e" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.25"/>
+          <path d="M220 110 Q260 160 300 180" stroke="#3d332e" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.2"/>
+          <!-- 枝に咲く花 -->
+          <circle cx="280" cy="100" r="10" fill="#f4acb7" opacity="0.6"/>
+          <circle cx="280" cy="100" r="4" fill="#c53d33" opacity="0.7"/>
+          <circle cx="340" cy="150" r="9" fill="#f4acb7" opacity="0.6"/>
+          <circle cx="420" cy="130" r="12" fill="#f4acb7" opacity="0.65"/>
+          <circle cx="420" cy="130" r="5" fill="#c53d33" opacity="0.8"/>
+        </svg>
+      </div>
+
+      <div class="scene-content">
+        <div class="badge-tag">じゅうさん</div>
+        <h2 class="main-title finale-title">
+          <span class="line-reveal">よろしく おねがいします、</span><br>
+          <span class="line-reveal delay-1">みなさん！</span>
+        </h2>
+        
+        <div class="finale-actions">
+          <button type="button" class="restart-btn" id="restart-btn" aria-label="はじめへ もどる">
+            <span class="btn-arrow" aria-hidden="true">↑</span>
+            <span class="btn-text">はじめへ</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
